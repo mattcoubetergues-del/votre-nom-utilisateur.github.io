@@ -1,0 +1,168 @@
+/* Importation de polices de caractères */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Montserrat:wght@400;700&display=swap');
+
+/* Styles généraux */
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    background-color: #0a0a0a;
+}
+
+/* Animation de fond Parallax */
+body {
+    background-image: url('https://votre-image-de-foret-hantee.jpg'); /* Remplacer par votre image de fond */
+    background-size: cover;
+    background-attachment: fixed; /* L'effet Parallax est ici ! */
+    background-position: center;
+}
+
+/* En-tête (Hero Section) */
+.hero-section {
+    text-align: center;
+    padding: 100px 20px;
+    background: rgba(0, 0, 0, 0.6); /* Fond sombre transparent */
+}
+
+.hero-section h1 {
+    font-family: 'Creepster', cursive;
+    font-size: 4em;
+    color: #ff5722; /* Orange vif pour l'Halloween */
+    text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8);
+}
+
+.hero-section p {
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+/* Sections principales */
+main section {
+    padding: 60px 20px;
+    margin: 20px 0;
+    background: rgba(17, 17, 17, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Section avec squelettes */
+.section-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    position: relative;
+    overflow: hidden; /* Cache les squelettes qui dépassent */
+}
+
+.section-details h2 {
+    color: #ff5722;
+}
+
+.skeleton-left,
+.skeleton-right {
+    width: 200px; /* Taille de l'image de squelette */
+    height: 300px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.8;
+    transition: transform 0.5s ease-out; /* Animation à l'approche */
+}
+
+.skeleton-left {
+    background-image: url('https://votre-image-de-squelette-gauche.png'); /* Remplacer par votre image de squelette */
+    transform: translateX(-50%);
+}
+
+.skeleton-right {
+    background-image: url('https://votre-image-de-squelette-droite.png'); /* Remplacer par votre image de squelette */
+    transform: translateX(50%);
+}
+
+.section-details:hover .skeleton-left {
+    transform: translateX(0);
+}
+
+.section-details:hover .skeleton-right {
+    transform: translateX(0);
+}
+
+/* Toiles d'araignées */
+.spider-web {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background-image: url('https://votre-image-de-toile-daraignee.png'); /* Remplacer par votre image de toile d'araignée */
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.7;
+    z-index: 10;
+}
+
+.top-left {
+    top: -50px;
+    left: -50px;
+    transform: rotate(20deg);
+}
+
+.top-right {
+    top: -50px;
+    right: -50px;
+    transform: scaleX(-1) rotate(20deg);
+}
+
+/* Grille du programme */
+.program-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    text-align: left;
+}
+
+.program-item {
+    background: rgba(34, 34, 34, 0.7);
+    padding: 20px;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.program-item:hover {
+    transform: translateY(-10px);
+}
+
+.program-item h3 {
+    color: #ff7d33;
+}
+
+/* Pied de page */
+footer {
+    text-align: center;
+    padding: 30px;
+    background: #000;
+}
+
+/* Responsivité pour les petits écrans */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 3em;
+    }
+
+    .section-details {
+        flex-direction: column;
+    }
+
+    .skeleton-left,
+    .skeleton-right {
+        position: static;
+        transform: none;
+    }
+
+    .section-details:hover .skeleton-left,
+    .section-details:hover .skeleton-right {
+        transform: none;
+    }
+
+    .spider-web {
+        display: none; /* Cache les toiles sur les petits écrans pour plus de lisibilité */
+    }
+}
