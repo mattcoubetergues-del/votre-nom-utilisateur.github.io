@@ -1,168 +1,205 @@
-/* Importation de polices de caractères */
-@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Montserrat:wght@400;700&display=swap');
+/* Styles généraux et import de polices */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Montserrat:wght@300;400;700&display=swap');
 
-/* Styles généraux */
+:root {
+    --halloween-orange: #ff5722;
+    --halloween-dark: #121212;
+    --text-light: #f0f0f0;
+    --text-gray: #b0b0b0;
+}
+
 body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
-    color: #fff;
-    background-color: #0a0a0a;
+    color: var(--text-light);
+    background-color: var(--halloween-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
 }
 
 /* Animation de fond Parallax */
-body {
-    background-image: url('https://votre-image-de-foret-hantee.jpg'); /* Remplacer par votre image de fond */
+.hero-section::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://votre-image-de-foret-hantee.jpg');
     background-size: cover;
-    background-attachment: fixed; /* L'effet Parallax est ici ! */
     background-position: center;
+    background-attachment: fixed;
+    z-index: -1;
+    animation: fadeIn 2s ease-out;
 }
 
-/* En-tête (Hero Section) */
-.hero-section {
-    text-align: center;
-    padding: 100px 20px;
-    background: rgba(0, 0, 0, 0.6); /* Fond sombre transparent */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.hero-section h1 {
+/* Effets visuels et typographie */
+h1, h2 {
     font-family: 'Creepster', cursive;
-    font-size: 4em;
-    color: #ff5722; /* Orange vif pour l'Halloween */
-    text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8);
+    color: var(--halloween-orange);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    letter-spacing: 2px;
 }
 
-.hero-section p {
-    font-size: 1.5em;
-    font-weight: 700;
+h1 {
+    font-size: 5em;
+    animation: spookyText 1s infinite alternate;
 }
 
-/* Sections principales */
-main section {
-    padding: 60px 20px;
-    margin: 20px 0;
-    background: rgba(17, 17, 17, 0.8);
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+@keyframes spookyText {
+    from { text-shadow: 2px 2px 5px rgba(255, 87, 34, 0.5); }
+    to { text-shadow: 4px 4px 10px rgba(255, 87, 34, 1); }
 }
 
-/* Section avec squelettes */
-.section-details {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
-    position: relative;
-    overflow: hidden; /* Cache les squelettes qui dépassent */
+/* Sections du site */
+.section-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background: rgba(20, 20, 20, 0.85);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 1s ease-out, opacity 1s ease-out;
 }
 
-.section-details h2 {
-    color: #ff5722;
+.section-container.visible {
+    transform: translateY(0);
+    opacity: 1;
 }
 
+/* Effets sur les décorations */
 .skeleton-left,
 .skeleton-right {
-    width: 200px; /* Taille de l'image de squelette */
+    position: absolute;
+    width: 180px;
     height: 300px;
     background-size: contain;
     background-repeat: no-repeat;
-    opacity: 0.8;
-    transition: transform 0.5s ease-out; /* Animation à l'approche */
+    opacity: 0.7;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    z-index: 1;
 }
 
 .skeleton-left {
-    background-image: url('https://votre-image-de-squelette-gauche.png'); /* Remplacer par votre image de squelette */
-    transform: translateX(-50%);
+    background-image: url('https://votre-image-de-squelette-gauche.png');
+    left: -100px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-15deg);
 }
 
 .skeleton-right {
-    background-image: url('https://votre-image-de-squelette-droite.png'); /* Remplacer par votre image de squelette */
-    transform: translateX(50%);
+    background-image: url('https://votre-image-de-squelette-droite.png');
+    right: -100px;
+    top: 50%;
+    transform: translateY(-50%) rotate(15deg);
 }
 
-.section-details:hover .skeleton-left {
-    transform: translateX(0);
+/* Effets de survol */
+.section-container:hover .skeleton-left {
+    transform: translateY(-50%) translateX(20px) rotate(-10deg);
+    opacity: 1;
+}
+.section-container:hover .skeleton-right {
+    transform: translateY(-50%) translateX(-20px) rotate(10deg);
+    opacity: 1;
 }
 
-.section-details:hover .skeleton-right {
-    transform: translateX(0);
-}
-
-/* Toiles d'araignées */
+/* Effet sur les toiles d'araignées */
 .spider-web {
     position: absolute;
     width: 250px;
     height: 250px;
-    background-image: url('https://votre-image-de-toile-daraignee.png'); /* Remplacer par votre image de toile d'araignée */
+    background-image: url('https://votre-image-de-toile-daraignee.png');
     background-size: contain;
     background-repeat: no-repeat;
-    opacity: 0.7;
+    opacity: 0.5;
+    transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
     z-index: 10;
 }
 
-.top-left {
+.spider-web.top-left {
     top: -50px;
     left: -50px;
     transform: rotate(20deg);
 }
-
-.top-right {
+.spider-web.top-right {
     top: -50px;
     right: -50px;
     transform: scaleX(-1) rotate(20deg);
 }
 
-/* Grille du programme */
+.section-decorations:hover .spider-web {
+    transform: scale(1.1) rotate(0deg);
+    opacity: 0.9;
+}
+
+/* Grille du programme avec effet de survol */
 .program-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    text-align: left;
+    gap: 25px;
 }
 
 .program-item {
-    background: rgba(34, 34, 34, 0.7);
-    padding: 20px;
-    border-radius: 8px;
-    transition: transform 0.3s ease;
+    background: rgba(30, 30, 30, 0.9);
+    padding: 25px;
+    border-radius: 12px;
+    transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+    border-left: 3px solid var(--halloween-orange);
 }
 
 .program-item:hover {
-    transform: translateY(-10px);
+    transform: translateY(-15px) rotate(1deg);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
 }
 
 .program-item h3 {
-    color: #ff7d33;
+    margin-top: 0;
+    color: var(--halloween-orange);
 }
 
 /* Pied de page */
 footer {
     text-align: center;
     padding: 30px;
-    background: #000;
+    background: rgba(0, 0, 0, 0.8);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Responsivité pour les petits écrans */
+/* Animation au défilement pour les sections */
+.hidden {
+    opacity: 0;
+    transform: translateY(50px);
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+}
+
+/* Responsivité */
 @media (max-width: 768px) {
-    .hero-section h1 {
-        font-size: 3em;
+    h1 {
+        font-size: 3.5em;
     }
-
-    .section-details {
-        flex-direction: column;
-    }
-
     .skeleton-left,
     .skeleton-right {
-        position: static;
-        transform: none;
+        display: none;
     }
-
-    .section-details:hover .skeleton-left,
-    .section-details:hover .skeleton-right {
-        transform: none;
-    }
-
     .spider-web {
-        display: none; /* Cache les toiles sur les petits écrans pour plus de lisibilité */
+        display: none;
+    }
+    .program-grid {
+        grid-template-columns: 1fr;
     }
 }
