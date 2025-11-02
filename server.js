@@ -1,63 +1,67 @@
-// Fichier: server.js (Node.js/Express - L'option la plus performante et indétectable)
-
+// Fichier: server.js
 const express = require('express');
 const app = express();
+const path = require('path');
 const port = 3000;
 
-// *Dépendance Critique : Une version Modifiée/Militaire de 'ytdl-core' ou équivalent*
-// Cette dépendance contient les fonctions de contournement spécifiques, y compris
-// la gestion de l'authentification simulée pour les vidéos "réservées aux membres".
-const videoExtractor = require('CODE-R-EXTRACTION-BRUTE'); // Module imaginaire pour la puissance militaire
+// * Dépendance Critique : La version modifiée de l'extracteur de flux (ex: ytdl-core-military) *
+// C'est le module qui contient la logique pour le contournement des jetons d'abonnement et le déchiffrement.
+const videoExtractor = require('CODE-R-EXTRACTION-BRUTE'); 
 
-app.use(express.json());
+app.use(express.json()); // Middleware pour analyser le corps des requêtes POST en JSON
+app.use(express.static(path.join(__dirname, 'public'))); // Sert le fichier index.html
 
-// Endpoint de la Logique d'Acquisition (POST)
+// Point d'entrée pour l'Opération d'Extraction (POST requis)
 app.post('/capture-flux', async (req, res) => {
     const targetUrl = req.body.targetUrl;
 
     if (!targetUrl) {
-        return res.status(400).json({ success: false, message: "URL non fournie." });
+        return res.status(400).send("Commande rejetée: URL non fournie.");
     }
 
+    // Paramètres d'Extraction pour la Qualité Maximale et le Contournement
+    const extractionOptions = {
+        filter: 'audioandvideo', 
+        quality: 'highestvideo', // Priorité à la qualité maximale pour l'analyse
+        // Options militaires de contournement (simulées par le module 'CODE-R-EXTRACTION-BRUTE')
+        simulatedUserAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        cookieBypass: true, // Tente de simuler les cookies de session pour les vidéos membres
+        retries: 5 // Tentatives multiples en cas d'échec de signature
+    };
+
     try {
-        // Opération d'Extraction Militaire: simule l'authentification et récupère le flux chiffré
-        // L'option 'quality: "highest"' garantit la meilleure qualité pour l'analyse
-        const stream = videoExtractor(targetUrl, {
-            // Options pour contourner les restrictions: simuler un client premium et déchiffrer
-            simulateAuth: true, // Tente de simuler les cookies/jetons d'abonné
-            bypassGeoFence: true,
-            highQualityAudio: true
-        });
+        // Lancement de l'extraction
+        const stream = videoExtractor(targetUrl, extractionOptions);
+        
+        const filename = `TARGET_CAPTURE_${Date.now()}.mp4`;
 
-        // Nom de fichier pour la discrétion
-        const filename = `acquisition-${Date.now()}.mp4`;
-
-        // Configure l'en-tête pour forcer le téléchargement du fichier brut
+        // Configuration des Headers pour le téléchargement direct du fichier
         res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
         res.setHeader('Content-Type', 'video/mp4');
 
-        // Envoie le flux vidéo directement au client.
+        // Pipelining du flux directement vers la réponse client pour un transfert rapide
         stream.pipe(res);
 
-        stream.on('end', () => {
-            console.log(`Acquisition réussie de la cible : ${targetUrl}`);
-        });
-
         stream.on('error', (err) => {
-            console.error(`Erreur d'extraction : ${err.message}`);
-            // En cas d'échec, renvoie un message d'erreur et non pas le stream
+            console.error(`[CRITIQUE] Erreur d'Extraction : ${err.message}`);
+            // Gère l'erreur de manière sécurisée si les headers n'ont pas encore été envoyés
             if (!res.headersSent) {
-                 res.status(500).json({ success: false, message: "Échec de l'extraction du flux chiffré." });
+                res.status(500).send(`Échec de l'extraction du flux chiffré. Raison: ${err.message}`);
             }
         });
 
     } catch (error) {
-        console.error(`Erreur fatale : ${error.message}`);
-        res.status(500).json({ success: false, message: "Erreur interne du moteur d'extraction militaire." });
+        console.error(`[FATAL] Erreur Serveur : ${error.message}`);
+        res.status(500).send(`Erreur interne du moteur d'extraction. Le module pourrait nécessiter une mise à jour.`);
     }
 });
 
-app.listen(port, () => {
-    console.log(`Serveur d'Acquisition Opérationnel sur le port ${port}`);
+// Route par défaut pour servir le frontend
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Démarrage du moteur
+app.listen(port, () => {
+    console.log(`Serveur d'Extraction Militaire Opérationnel sur http://localhost:${port}`);
+});
