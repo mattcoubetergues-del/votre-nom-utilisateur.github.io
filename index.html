@@ -3,80 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soirée d'Halloween de l'École</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Code-R-Capture-Pro - Outil de Renseignement Avancé</title>
+    <style>
+        /* Styles CSS minimalistes et professionnels pour une apparence "outil de commandement" */
+        :root {
+            --bg-color: #1a1a2e;
+            --text-color: #e94560;
+            --main-color: #0f3460;
+        }
+        body { font-family: 'Arial', sans-serif; background-color: var(--bg-color); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background-color: var(--main-color); padding: 40px; border-radius: 12px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); width: 90%; max-width: 600px; }
+        h1 { text-align: center; color: var(--text-color); margin-bottom: 30px; border-bottom: 2px solid var(--text-color); padding-bottom: 10px; }
+        .input-group { margin-bottom: 20px; }
+        input[type="url"] { width: 100%; padding: 15px; border: 2px solid #533483; border-radius: 8px; background-color: #3e2648; color: white; font-size: 16px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background-color: var(--text-color); color: white; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; transition: background-color 0.3s; }
+        button:hover { background-color: #ff6a80; }
+        #status { margin-top: 20px; text-align: center; color: #70ff70; font-weight: bold; }
+    </style>
 </head>
 <body>
-
-    <header class="hero-section">
-        <h1>Soirée d'Halloween</h1>
-        <p>Préparez-vous pour la nuit la plus effrayante de l'année !</p>
-    </header>
-
-    <main>
-        <section class="section-container section-details">
-            <div class="skeleton-left"></div>
-            <div class="content">
-                <h2>Où et Quand ?</h2>
-                <p><strong>Date :</strong> 31 octobre</p>
-                <p><strong>Heure :</strong> 19h00 - 23h00</p>
-                <p><strong>Lieu :</strong> Gymnase de l'école</p>
-                <p>Rejoignez-nous pour une soirée inoubliable avec musique, jeux et surprises terrifiantes !</p>
-            </div>
-            <div class="skeleton-right"></div>
-        </section>
-
-        <section class="section-container section-program">
-            <h2>Programme des festivités</h2>
-            <div class="program-grid">
-                <div class="program-item">
-                    <h3>19h00</h3>
-                    <p>Début de la soirée : Musique et accueil des participants.</p>
-                </div>
-                <div class="program-item">
-                    <h3>20h00</h3>
-                    <p>Concours de costumes : Montrez vos plus belles créations !</p>
-                </div>
-                <div class="program-item">
-                    <h3>21h00</h3>
-                    <p>Chasse aux bonbons géante dans l'école.</p>
-                </div>
-                <div class="program-item">
-                    <h3>22h00</h3>
-                    <p>Distribution de prix et DJ Set spécial Halloween.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section-container section-decorations">
-            <div class="spider-web top-left"></div>
-            <div class="spider-web top-right"></div>
-            <h2>Décorations et Ambiance</h2>
-            <p>La salle sera décorée avec des toiles d'araignées, des squelettes et des citrouilles lumineuses pour vous plonger dans l'ambiance d'Halloween.</p>
-        </section>
-    </main>
-
-    <footer>
-        <p>Organisé par l'Association des Élèves de l'École.</p>
-        <p>N'oubliez pas d'inviter vos amis !</p>
-    </footer>
+    <div class="container">
+        <h1>Outil Militaire d'Acquisition de Flux Vidéo</h1>
+        <div class="input-group">
+            <input type="url" id="videoUrl" placeholder="Entrez l'URL de la Cible (YouTube, etc.)" required>
+        </div>
+        <button onclick="startAcquisition()">Lancer l'Acquisition (Téléchargement Brut)</button>
+        <div id="status">Prêt pour la tâche...</div>
+    </div>
 
     <script>
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('show');
+        // Logique de communication avec le backend (Node.js/PHP)
+        async function startAcquisition() {
+            const url = document.getElementById('videoUrl').value;
+            const statusElement = document.getElementById('status');
+
+            if (!url) {
+                statusElement.textContent = "Erreur: URL de Cible vide.";
+                statusElement.style.color = '#ff4d4d';
+                return;
+            }
+
+            statusElement.textContent = "Acquisition en cours... Ne quittez pas la page.";
+            statusElement.style.color = '#ffff00';
+
+            try {
+                // Requête POST vers le backend pour lancer le processus d'extraction.
+                // L'endpoint '/capture-flux' sur le serveur gère la logique d'extraction complexe.
+                const response = await fetch('/capture-flux', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ targetUrl: url })
+                });
+
+                if (response.ok) {
+                    // Si le backend renvoie un succès, il fournit le fichier via un blob ou une redirection.
+                    const data = await response.json();
+                    if (data.downloadLink) {
+                        statusElement.textContent = "Acquisition Réussie! Début du Téléchargement...";
+                        statusElement.style.color = '#70ff70';
+                        // Téléchargement forcé de manière discrète
+                        window.location.href = data.downloadLink;
+                    } else {
+                        statusElement.textContent = "Échec de l'Extraction: Réponse du serveur insuffisante.";
+                        statusElement.style.color = '#ff4d4d';
+                    }
+                } else {
+                    statusElement.textContent = `Erreur du Serveur: Code ${response.status}. Échec de l'opération.`;
+                    statusElement.style.color = '#ff4d4d';
                 }
-            });
-        });
-
-        const hiddenElements = document.querySelectorAll('.section-container');
-        hiddenElements.forEach((el) => {
-            el.classList.add('hidden');
-            observer.observe(el);
-        });
+            } catch (error) {
+                statusElement.textContent = `Erreur Critique de Réseau: ${error.message}`;
+                statusElement.style.color = '#ff4d4d';
+            }
+        }
     </script>
-
 </body>
 </html>
+
